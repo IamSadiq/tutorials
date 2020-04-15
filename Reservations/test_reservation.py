@@ -4,8 +4,13 @@ from reservation import Reservation
 class ReservationTest(unittest.TestCase):
     def __init__(self, methodName):
         super().__init__(methodName)
+        
+    def setUp(self):
         self.server = MockServer() # mock server
         self.reserver = Reservation(self.server)
+        
+    def tearDown(self):
+        pass
 
     # test find available tables
     def test_find_available_tables_finds_all_tables(self):
