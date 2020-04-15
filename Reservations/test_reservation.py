@@ -50,6 +50,25 @@ class ReservationTest(unittest.TestCase):
         response = self.reserver.change_reservation("Greg", table=3)
         self.assertEqual(False, response)
 
+    # test change reservation table is invalid
+    def test_change_reservation_table_is_invalid(self):
+        self.reserver.make_reservation("Kemi", table=2)
+        response = self.reserver.change_reservation("Kemi", table=11)
+        self.assertEqual(False, response)
+
+    # test change reservation table is not taken
+    def test_change_reservation_table_is_not_taken(self):
+        self.reserver.make_reservation("Ayo", table=1)
+        response = self.reserver.change_reservation("Ayo", table=5)
+        self.assertEqual(True, response)
+
+    # test change reservation table is taken
+    def test_change_reservation_table_is_taken(self):
+        self.reserver.make_reservation("Dora", table=2)
+        self.reserver.make_reservation("Nusi", table=3)
+        response = self.reserver.change_reservation("Nusi", table=2)
+        self.assertEqual(False, response)
+
     # test that change reservation frees previous reservation table
     def test_change_reservation_frees_previous_table(self):
         self.reserver.make_reservation("Mujaheed", table=4)
@@ -74,6 +93,26 @@ class ReservationTest(unittest.TestCase):
         response = self.reserver.make_reservation("Kris", 6)
         t, n = self.reserver.find_reservation("Kris")
         self.assertEqual(t, 6)
+
+    # test cancel reservation doesnt find reservation
+    def test_cancel_reservation_doesnt_find_reservation(self):
+        response = self.reserver.cancel_reservation("Luka")
+        self.assertEqual(response, False)
+
+    # test cancel reservation finds reservation
+    def test_cancel_reservation_finds_reservation(self):
+        self.reserver.make_reservation("Modric", 6)
+        response = self.reserver.cancel_reservation("Modric")
+        self.assertEqual(response, True)
+
+    # test cancel reservation frees table
+    def test_cancel_reservation_frees_table(self):
+        self.reserver.make_reservation("Xavi", 4)
+        response = self.reserver.cancel_reservation("Xavi")
+        availableTables = self.reserver.find_available_tables()
+        self.assertIn(4, availableTables)
+
+
 
 # our mock server
 class MockServer:

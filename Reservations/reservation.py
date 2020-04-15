@@ -35,14 +35,18 @@ class Reservation:
 
     def change_reservation(self, name, table):
         t, n = self.find_reservation(name)
-        if t is not None:
-            self.reservations[t] = None
-            return self.make_reservation(name, table)
-        return False
+
+        if t is None: return False # check if reservation exists
+        if table not in self.tables: return False # check if new table is invalid
+        if self.reservations[table] is not None: return False # check if new table is taken
+
+        self.reservations[t] = None
+        self.reservations[table] = name
+        return True
 
     def cancel_reservation(self, name):
         t, n = self.find_reservation(name)
-        if t is not None:
-            self.reservations[t] = None
-            return True
-        return False
+        if t is None: return False # check if reservation exists
+        
+        self.reservations[t] = None
+        return True
