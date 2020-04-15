@@ -21,18 +21,28 @@ class Reservation:
             self.reservations[table] = name
             return True
 
+    def has_reservation(self, name):
+        for t, n in self.reservations.iterrows():
+            if n == name:
+                return True
+        return False
+
     def find_reservation(self, name):
         for t, n in self.reservations.iterrows():
             if n == name:
-                return {t: n}
+                return t, n
+        return None, None
+
+    def change_reservation(self, name, table):
+        t, n = self.find_reservation(name)
+        if t is not None:
+            self.reservations[t] = None
+            return self.make_reservation(name, table)
         return False
 
-    def change_reservation(self, name, table=None):
-        # if self.reservations[]
-        pass
-
     def cancel_reservation(self, name):
-        pass
-
-    def make_payment(self):
-        pass
+        t, n = self.find_reservation(name)
+        if t is not None:
+            self.reservations[t] = None
+            return True
+        return False
