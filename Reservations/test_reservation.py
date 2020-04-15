@@ -40,16 +40,40 @@ class ReservationTest(unittest.TestCase):
         self.assertEqual(False, response)
 
     # test that reservation exists
-    # def test_change_reservation_check_reservation_exists(self):
-    #     self.reserver.make_reservation("Matt", table=2)
-    #     response = self.reserver.change_reservation("Matt", table=3)
-    #     self.assertEqual(True, response)
+    def test_change_reservation_check_reservation_exists(self):
+        self.reserver.make_reservation("Matt", table=2)
+        response = self.reserver.change_reservation("Matt", table=3)
+        self.assertEqual(True, response)
     
-    # # test that reservation doesnt exists
-    # def test_change_reservation_check_reservation_doesnt_exists(self):
-    #     response = self.reserver.change_reservation("Greg", table=3)
-    #     self.assertEqual(False, response)
+    # test that reservation doesnt exists
+    def test_change_reservation_check_reservation_doesnt_exists(self):
+        response = self.reserver.change_reservation("Greg", table=3)
+        self.assertEqual(False, response)
 
+    # test that change reservation frees previous reservation table
+    def test_change_reservation_frees_previous_table(self):
+        self.reserver.make_reservation("Mujaheed", table=4)
+        self.reserver.change_reservation("Mujaheed", table=3)
+        availableTables = self.reserver.find_available_tables()
+        self.assertIn(4, availableTables)
+
+    # test that change reservation changes reservation table
+    def test_that_change_reservation_changes_reservation_table(self):
+        self.reserver.make_reservation("Ayo", table=1)
+        self.reserver.change_reservation("Ayo", table=5)
+        availableTables = self.reserver.find_available_tables()
+        self.assertNotIn(5, availableTables)
+
+    # test find reservation doesn't find reservation
+    def test_find_reservation_doesnt_find_reservation(self):
+        t, n = self.reserver.find_reservation("Kris")
+        self.assertIs(t, None)
+
+    # test find reservation finds reservation
+    def test_find_reservation_actually_finds_reservation(self):
+        response = self.reserver.make_reservation("Kris", 6)
+        t, n = self.reserver.find_reservation("Kris")
+        self.assertEqual(t, 6)
 
 # our mock server
 class MockServer:

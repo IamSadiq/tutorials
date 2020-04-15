@@ -22,16 +22,16 @@ class Reservation:
             return True
 
     def has_reservation(self, name):
-        for t, n in self.reservations.iterrows():
+        for t, n in self.reservations.items():
             if n == name:
                 return True
         return False
 
     def find_reservation(self, name):
-        for t, n in self.reservations.iterrows():
+        for t, n in self.reservations.items():
             if n == name:
                 return t, n
-        return None, None
+        return None, name
 
     def change_reservation(self, name, table):
         t, n = self.find_reservation(name)
